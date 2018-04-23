@@ -1,10 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "base.html" %}
 
-</body>
-</html>
+{% block content %}
+    <div>
+        <h2>Cart</h2>
+        {% for data in products %}
+
+               <h4> {{data.name}} </h4>
+        <div>{{data.price}}</div>
+        <div><a href='/addToCart/{{data.product_id}}/cart'> Add to Cart </a>
+            </div>
+         <div>   <a href="removeFromCart/{{data.product_id}}/cart">Remove</a></div>
+
+
+        {% endfor %}
+        <a href="/checkout">Proceed to checkout</a>
+   </div>
+{% endblock %}

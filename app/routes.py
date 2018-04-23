@@ -70,3 +70,95 @@ def Co2():
     #comp=m.plot_components(forecast).to_json
 
     return forecast
+
+@app.route('/products')
+def products():
+    product_list=Product.query.all()
+    return render_template('products.html', products=product_list)
+
+@app.route('/addToCart/<int:product_id>/<string:from_page>')
+def addToCart(product_id, from_page):
+    if current_user.is_anonymous:
+        return redirect(url_for('login'))
+
+    kart = Kart(user_id=current_user.user_id, product_id = product_id)
+    db.session.add(kart)
+    db.session.commit()
+    return redirect(url_for('cart'))
+
+@app.route('/removeFromCart/<int:product_id>/<string:from_page>')
+def remove_cart(product_id,from_page):
+    if current_user.is_anonymous:
+        return redirect(url_for('login'))
+    kart=Kart.query.filter_by(user_id=current_user.user_id, product_id=product_id).first()
+    db.session.delete(kart)
+    db.session.commit()
+    return redirect(url_for('cart'))
+
+@app.route('/cart')
+def cart():
+    if current_user.is_anonymous:
+        return redirect(url_for('login'))
+    product_in_cart = Kart.query.filter_by(user_id=current_user.user_id).join(
+        Product, Kart.product_id==Product.product_id).add_columns(
+        Product.name, Product.price, Product.image, Product.product_id).all()
+    #db.session.query(func.count().label('amount:')).all()
+
+    return render_template('cart.html', products=product_in_cart, totalPrice=300, LoggedIn=current_user)
+
+@app.route('/product/<string:product_id>')
+def details(product_id):
+    product_detail=Product.query.filter_by(product_id=product_id)
+    return render_template('details.html', pDetail=product_detail)
+
+
+
+@app.route('/checkout')
+def checkout():
+
+    if current_user.is_anonymous:
+        return redirect(url_for('login'))
+    product_in_cart = Kart.query.filter_by(user_id=current_user.user_id).join(
+        Product, Kart.product_id==Product.product_id).add_columns(
+        Product.name, Product.price, Product.image, Product.product_id).all()
+    count = Kart.query.filter_by(user_id=current_user.user_id).count()
+    sum1 = 0
+    for product in product_in_cart:
+        sum1 += product.price
+    return render_template('checkout.html', products=product_in_cart, totalPrice=300, LoggedIn=current_user, sum=sum1, count=count)
+
+@app.route('/checkout_action', methods=['POST'])
+def checkout_action():
+
+    #check name is correct
+
+    #form1=CheckoutUserForm
+    #form2=CheckoutBillingForm
+    #if form1.validate_on_submit():
+
+    #if form2.validate_on_submit():
+
+    #cardname = request.form.get('card_name')
+    #cardnumber = request.form.get('card_number')
+    product_in_cart = Kart.query.filter_by(user_id=current_user.user_id).join(
+        Product, Kart.product_id == Product.product_id).add_columns(
+        Product.name, Product.price, Product.image, Product.product_id).all()
+    sum1 = 0
+    for product in product_in_cart:
+        sum1 += product.price
+
+    checkout_info = Transaction(user_id=current_user.user_id,B_name=request.form['firstname'], B_email=request.form['email'],B_address=request.form['address'],B_city=request.form['city'],B_state=request.form['state'],B_zip=request.form['zip'],P_NameonCard=request.form['cardname'],CC_number=request.form['cardnumber'],exp_month=request.form['expmonth'],exp_year=request.form['expyear'],cvv=request.form['cvv'],sumtotal=sum1)
+    db.session.add(checkout_info)
+    db.session.commit()
+
+    for product in product_in_cart:
+        receipt_info = JoinTable(product_id=product.product_id, t_id=checkout_info.t_id)
+        db.session.add(receipt_info)
+        db.session.commit()
+
+    db.session.query(Kart).delete()
+    db.session.commit()
+    #remove selected items from Kart
+
+
+    return render_template('checkout_action.html')
