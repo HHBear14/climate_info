@@ -1,6 +1,7 @@
-from app import db, login
+from app import db, login, app2
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_whooshalchemy import whoosh_index
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -22,10 +23,13 @@ class User(UserMixin, db.Model):
 def load_user(id):
     return User.query.get(int(id))
 
-class Z_Cities(db.Model):
+class z_cities(db.Model):
+    #__searchable__ = ['city_id']  # these fields will be indexed by whoosh
     city_id=db.Column(db.Integer, primary_key=True)
     StateName=db.Column(db.String(64))
     MSAName=db.Column(db.String(64))
     UWHomes_AllTiers=db.Column(db.Float)
     UWHomes_TotalValue_AllTiers=db.Column(db.Float)
     AllHomes_AllTiers_ShareUW=db.Column(db.Float)
+
+#whoosh_index(app2, Z_Cities)

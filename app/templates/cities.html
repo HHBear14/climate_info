@@ -1,9 +1,14 @@
-{% extends "base.html" %}
+{% extends "base.html" %}]
+
 {% block content %}
     <div>
-        <form action="Query" method="get">
-            {{ form.search.label }}
-            {{ form.Submit.label }}
+        <form action="/search_results" method=POST>
+            {{ form.search }}
+            <input type="submit" value=text class="btn">
+            {{ form.submit }}
 </form>
+
+{{cities}}
+        cities
     </div>
 {% endblock %}

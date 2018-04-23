@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<div>{% if results %}
+
+  {% for result in results %}
+    {{ result.MSAName }}
+    {{ result.city_id }}
+    <br>
+  {% endfor %}
+    {% else %}
+    City not in database
+    {% endif %}
+</div>
+{% endblock %}

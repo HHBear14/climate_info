@@ -29,7 +29,7 @@ class RegistrationForm(FlaskForm):
         if user is not None:
             raise ValidationError('Please use a different email address.')
 
-class CityForm(Form):
+class CityForm(FlaskForm):
   search = StringField('search', [DataRequired()])
-  submit = SubmitField('Search',
-                       render_kw={'class': 'btn btn-success btn-block'})
+  submit = SubmitField('Search')
+                       #render_kw={'class': 'btn btn-success btn-block'})
