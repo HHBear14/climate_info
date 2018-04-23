@@ -1,13 +1,15 @@
 from app import app2 as app
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect, url_for, flash, request
 from app.forms import LoginForm, CityForm
-from app.models import User, db, z_cities
+from app.models import User, db, z_cities, Product, Kart, Transaction, JoinTable, Category
 from flask import request
 import pandas as pd
+from app import db
 from fbprophet import Prophet
 import matplotlib.pyplot as plt
 import numpy as np
 plt.interactive(True)
+from flask_login import current_user
 
 
 
@@ -81,7 +83,7 @@ def addToCart(product_id, from_page):
     if current_user.is_anonymous:
         return redirect(url_for('login'))
 
-    kart = Kart(user_id=current_user.user_id, product_id = product_id)
+    kart = Kart(user_id=current_user.id, product_id = product_id)
     db.session.add(kart)
     db.session.commit()
     return redirect(url_for('cart'))
@@ -90,7 +92,7 @@ def addToCart(product_id, from_page):
 def remove_cart(product_id,from_page):
     if current_user.is_anonymous:
         return redirect(url_for('login'))
-    kart=Kart.query.filter_by(user_id=current_user.user_id, product_id=product_id).first()
+    kart=Kart.query.filter_by(user_id=current_user.id, product_id=product_id).first()
     db.session.delete(kart)
     db.session.commit()
     return redirect(url_for('cart'))
@@ -99,7 +101,7 @@ def remove_cart(product_id,from_page):
 def cart():
     if current_user.is_anonymous:
         return redirect(url_for('login'))
-    product_in_cart = Kart.query.filter_by(user_id=current_user.user_id).join(
+    product_in_cart = Kart.query.filter_by(user_id=current_user.id).join(
         Product, Kart.product_id==Product.product_id).add_columns(
         Product.name, Product.price, Product.image, Product.product_id).all()
     #db.session.query(func.count().label('amount:')).all()
@@ -118,10 +120,10 @@ def checkout():
 
     if current_user.is_anonymous:
         return redirect(url_for('login'))
-    product_in_cart = Kart.query.filter_by(user_id=current_user.user_id).join(
+    product_in_cart = Kart.query.filter_by(user_id=current_user.id).join(
         Product, Kart.product_id==Product.product_id).add_columns(
         Product.name, Product.price, Product.image, Product.product_id).all()
-    count = Kart.query.filter_by(user_id=current_user.user_id).count()
+    count = Kart.query.filter_by(user_id=current_user.id).count()
     sum1 = 0
     for product in product_in_cart:
         sum1 += product.price
@@ -140,14 +142,14 @@ def checkout_action():
 
     #cardname = request.form.get('card_name')
     #cardnumber = request.form.get('card_number')
-    product_in_cart = Kart.query.filter_by(user_id=current_user.user_id).join(
+    product_in_cart = Kart.query.filter_by(user_id=current_user.id).join(
         Product, Kart.product_id == Product.product_id).add_columns(
         Product.name, Product.price, Product.image, Product.product_id).all()
     sum1 = 0
     for product in product_in_cart:
         sum1 += product.price
 
-    checkout_info = Transaction(user_id=current_user.user_id,B_name=request.form['firstname'], B_email=request.form['email'],B_address=request.form['address'],B_city=request.form['city'],B_state=request.form['state'],B_zip=request.form['zip'],P_NameonCard=request.form['cardname'],CC_number=request.form['cardnumber'],exp_month=request.form['expmonth'],exp_year=request.form['expyear'],cvv=request.form['cvv'],sumtotal=sum1)
+    checkout_info = Transaction(user_id=current_user.id,B_name=request.form['firstname'], B_email=request.form['email'],B_address=request.form['address'],B_city=request.form['city'],B_state=request.form['state'],B_zip=request.form['zip'],P_NameonCard=request.form['cardname'],CC_number=request.form['cardnumber'],exp_month=request.form['expmonth'],exp_year=request.form['expyear'],cvv=request.form['cvv'],sumtotal=sum1)
     db.session.add(checkout_info)
     db.session.commit()
 

@@ -1,7 +1,8 @@
 from app import db, login, app2
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_whooshalchemy import whoosh_index
+
+from datetime import datetime
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -32,7 +33,7 @@ class z_cities(db.Model):
     UWHomes_TotalValue_AllTiers=db.Column(db.Float)
     AllHomes_AllTiers_ShareUW=db.Column(db.Float)
 
-#whoosh_index(app2, Z_Cities)
+
 
 class Category(db.Model):
    category_id = db.Column(db.Integer, primary_key=True)
@@ -53,12 +54,12 @@ class Product(db.Model):
 class Kart(db.Model):
    id = db.Column(db.Integer, primary_key=True)
    product_id = db.Column(db.Integer, db.ForeignKey('product.product_id'))
-   user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
+   user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
 class Transaction(db.Model):
     t_id = db.Column(db.Integer, primary_key=True)
-    user_id=db.Column(db.Integer, db.ForeignKey('user.user_id'))
+    user_id=db.Column(db.Integer, db.ForeignKey('user.id'))
     B_name=db.Column(db.String(40))
     B_email=db.Column(db.String(40))
     B_address=db.Column(db.String(70))
