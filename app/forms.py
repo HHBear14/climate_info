@@ -28,3 +28,8 @@ class RegistrationForm(FlaskForm):
         user = User.query.filter_by(email=email.data).first()
         if user is not None:
             raise ValidationError('Please use a different email address.')
+
+class CityForm(Form):
+  search = StringField('search', [DataRequired()])
+  submit = SubmitField('Search',
+                       render_kw={'class': 'btn btn-success btn-block'})

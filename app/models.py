@@ -21,3 +21,11 @@ class User(UserMixin, db.Model):
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
+
+class Z_Cities(db.Model):
+    city_id=db.Column(db.Integer, primary_key=True)
+    StateName=db.Column(db.String(64))
+    MSAName=db.Column(db.String(64))
+    UWHomes_AllTiers=db.Column(db.Float)
+    UWHomes_TotalValue_AllTiers=db.Column(db.Float)
+    AllHomes_AllTiers_ShareUW=db.Column(db.Float)
