@@ -3,7 +3,7 @@ $(document).ready(function () {
     function handleCo2Response(response, status, xhr){
         //console.log(response, status, xhr)
         console.log(response)
-        let Co2l = response.Co2l
+        let Co2l = response.yhat
         $("#Co2Results").empty();
         //$("#Co2Level").text(JSON.stringify(Co2l));
 
@@ -11,12 +11,13 @@ $(document).ready(function () {
             console.log(i+ " " +Co2l[i])
             $("#Co2Results").append(i+ " " +Co2l[i]+ "<br>")
         };
+        //return Co2l
         renderChart(Co2l);
     };
 
     function Co2ButtonClicked(event) {
-        var var1 = '/Co2'
-        var var2 = 'Co2_dates'
+        var var1 = '/Co2_dates'
+        var var2 = '/Co2'
 
         $.getJSON(var2, handleCo2Response);
     };

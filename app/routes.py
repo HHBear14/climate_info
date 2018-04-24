@@ -76,7 +76,7 @@ def Co2():
 
     #comp=m.plot_components(forecast).to_json
 
-    return forecast, future_json
+    return forecast
 
 @app.route('/Co2_dates')
 def Co2_dates():
