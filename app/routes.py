@@ -45,6 +45,10 @@ def search_results():
         results = db.engine.execute("SELECT z_cities.MSAName FROM z_cities")
         return render_template('cities.html', results=results, form=form)
 
+@app.route('/Co2button')
+def Co2button():
+    return render_template('Co2.html')
+
 @app.route('/Co2')
 def Co2():
     Co2 = pd.read_csv('climate_data/co2/co2-mm-mlo.csv')
@@ -61,6 +65,7 @@ def Co2():
     m.fit(forecast_data);
 
     future = m.make_future_dataframe(periods=998, freq='m')
+    future_json=future.to_json()
 
     forecast = m.predict(future)
     forecast = forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].to_json()
@@ -71,7 +76,7 @@ def Co2():
 
     #comp=m.plot_components(forecast).to_json
 
-    return forecast
+    return forecast, future_json
 
 @app.route('/products')
 def products():

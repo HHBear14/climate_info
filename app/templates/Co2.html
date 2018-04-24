@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <button id="Co2Button" class="btn btn-default">Co2 Levels</button>
+                </div>
+        </div>
+
+    </div>
+        <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+
+        <div class="row">
+            <div id="Co2Results"></div>
+        </div>
+{% endblock %}
+
+{% block js %}
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+    <script type="text/javascript" src="{{ url_for('static', filename = 'Co2.js') }}"></script>
+{% endblock %}
