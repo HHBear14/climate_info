@@ -1,6 +1,3 @@
-import forecast from "./routes.py";
-import future_json from "./routes.py";
-import Co2 from "./routes.py";
 
 $(document).ready(function () {
     function handleCo2Response(response, status, xhr){
@@ -18,8 +15,8 @@ $(document).ready(function () {
     };
 
     function Co2ButtonClicked(event) {
-        var var1 = forecast
-        var var2 = future_json
+        var var1 = '/Co2'
+        var var2 = 'Co2_dates'
 
         $.getJSON(var2, handleCo2Response);
     };
