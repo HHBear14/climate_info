@@ -1,7 +1,115 @@
 body  {
     background-image: url("images/sunset.jpg");
     background-color: #cccccc;
+    padding-left: 172.172px;
+    margin:auto;
 }
 
-.lead{
-    font}
+.nav-item{
+line-height: 70px;
+display: inline-block;
+text-align: center!important;
+vertical-align: middle!important;
+}
+
+h1{
+float: center;
+text-align: center;
+}
+
+.centering{
+float:center;
+text-align: center;
+}
+
+nav.col-md-2 d-none d-md-block bg-light sidebar:hover{
+    background-color: #495057!important;
+    height: 100%;!important;
+    position: fixed!important;
+    display: flex!important;
+    min-height: 100%!important;
+    vertical-align: baseline!important;
+    padding:auto;
+}
+a.nav-link{
+display: block!important;
+    padding: 8.3% 1rem!important;
+}
+.sidebar-sticky{
+    background-color: #495057!important;
+    height: 100%;!important;
+    position: fixed!important;
+    display: flex!important;
+    min-height: 100%!important;
+    vertical-align: baseline!important;
+}
+div.sidebar-sticky{
+left:0px;
+}
+.nav flex-column{
+line-height: 70px;
+text-align: center;
+    display: inline-block!important;
+    vertical-align: middle!important;
+    align-items: stretch!important;
+    background-color: #495057!important;
+    height: 100%;!important;
+    line-height: inherit!important;
+    position: fixed!important;
+    display: flex!important;
+    min-height: 100%!important;
+    vertical-align: baseline!important;
+    box-sizing: border-box!important;
+    padding: 10% 1rem;
+}
+
+#1a{
+    display: block!important;
+    padding: 8.3% 1rem!important;
+}
+
+#1b{
+    display: block!important;
+    padding: 8.3% 1rem!important;
+}
+#1c{
+    display: block!important;
+    padding: 8.3% 1rem!important;
+}
+#1d{
+    display: block!important;
+    padding: 8.3% 1rem!important;
+}
+#1e{
+    display: block!important;
+    padding: 8.3% 1rem!important;
+}
+#1f{
+    display: block!important;
+    padding: 8.3% 1rem!important;
+}
+#1g{
+    display: block!important;
+    padding: 8.3% 1rem!important;
+}
+#1h{
+    display: block!important;
+    padding: 8.3% 1rem!important;
+}
+#1i{
+    display: block!important;
+    padding: 8.3% 1rem!important;
+}
+#1j{
+    display: block!important;
+    padding: 8.3% 1rem!important;
+}
+
+#1k{
+    display: block!important;
+    padding: 8.3% 1rem!important;
+}
+#1l{
+    display: block!important;
+    padding: 8.3% 1rem!important;
+}
