@@ -27,6 +27,7 @@ def load_user(id):
 class z_cities(db.Model):
     #__searchable__ = ['city_id']  # these fields will be indexed by whoosh
     city_id=db.Column(db.Integer, primary_key=True)
+    RegionName=db.Column(db.String(64))
     StateName=db.Column(db.String(64))
     MSAName=db.Column(db.String(64))
     UWHomes_AllTiers=db.Column(db.Float)

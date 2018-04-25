@@ -3,8 +3,9 @@
 <div class="centering">{% if results %}
 
   {% for result in results %}
-    {{ result.MSAName }}
-    {{ result.city_id }}
+    {{ result.RegionName}} in
+    {{ result.MSAName }} will have
+    {{ result.UWHomes_AllTiers }} homes underwater by the year 2100, resulting in ${{ result.UWHomes_TotalValue_AllTiers}} in total losses.
     <br>
   {% endfor %}
     {% else %}

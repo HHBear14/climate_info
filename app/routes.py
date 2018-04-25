@@ -39,10 +39,10 @@ def cities():
 def search_results():
     form = CityForm()
     if form.search.data is not None:
-        results = z_cities.query.filter(z_cities.MSAName.like('%'+form.search.data))
+        results = z_cities.query.filter(z_cities.RegionName.like('%'+form.search.data))
         return render_template('search_results.html', results=results,form=form)
     else:
-        results = db.engine.execute("SELECT z_cities.MSAName FROM z_cities")
+        results = db.engine.execute("SELECT z_cities.RegionName FROM z_cities")
         return render_template('cities.html', results=results, form=form)
 
 @app.route('/Co2button')
@@ -68,7 +68,7 @@ def Co2():
     future_json=future.to_json()
 
     forecast = m.predict(future)
-    forecast = forecast[['ds', 'yhat', 'yhat_lower', 'yhat_upper']].to_json()
+    forecast = forecast[['ds','yhat', 'yhat_lower', 'yhat_upper']].to_json()
 
     #fig = m.plot(forecast, xlabel='Date', ylabel='Co2 ppm').to_json
     #plt.title('Co2 in our Atmosphere')
@@ -106,6 +106,64 @@ def Co2_dates():
     #comp=m.plot_components(forecast).to_json
 
     return future_json
+
+@app.route('/temp')
+def temp():
+    temp = pd.read_csv('climate_data/temp/monthly_csv.csv')
+
+    temp.set_index('Date', inplace=True)
+    temp['ds'] =temp.index
+    temp['y'] = temp['Mean']
+    forecast_data_temp = temp[['ds', 'y']].copy()
+    forecast_data_temp.reset_index(inplace=True)
+    del forecast_data_temp['Date']
+
+    n = Prophet(mcmc_samples=300, weekly_seasonality=False)
+    n.add_seasonality(name='monthly', period=30.5, fourier_order=5)
+    n.fit(forecast_data_temp);
+
+    future_temp = n.make_future_dataframe(periods=998, freq='m')
+    future_json_temp=future_temp.to_json()
+
+    forecast_temp = n.predict(future_temp)
+    forecast_temp = forecast_temp[['ds','yhat', 'yhat_lower', 'yhat_upper']].to_json()
+
+    #fig = m.plot(forecast, xlabel='Date', ylabel='Co2 ppm').to_json
+    #plt.title('Co2 in our Atmosphere')
+    #fig.gca().yaxis.set_major_formatter(plt.show('${x:,.0f}'))
+
+    #comp=m.plot_components(forecast).to_json
+
+    return forecast_temp
+
+@app.route('/sl')
+def sl():
+    sl = pd.read_csv('climate_data/sea_level/csiro_recons_gmsl_mo_2015_csv.csv')
+
+    sl.set_index('Time', inplace=True)
+    sl['ds'] =sl.index
+    sl['y'] = sl['GMSL']
+    forecast_data_sl = sl[['ds', 'y']].copy()
+    forecast_data_sl.reset_index(inplace=True)
+    del forecast_data_sl['Time']
+
+    o = Prophet(mcmc_samples=300, weekly_seasonality=False)
+    o.add_seasonality(name='monthly', period=30.5, fourier_order=5)
+    o.fit(forecast_data_sl);
+
+    future_sl = o.make_future_dataframe(periods=998, freq='m')
+    future_json_sl=future_sl.to_json()
+
+    forecast_sl = o.predict(future_sl)
+    forecast_sl = forecast_sl[['ds','yhat', 'yhat_lower', 'yhat_upper']].to_json()
+
+    #fig = m.plot(forecast, xlabel='Date', ylabel='Co2 ppm').to_json
+    #plt.title('Co2 in our Atmosphere')
+    #fig.gca().yaxis.set_major_formatter(plt.show('${x:,.0f}'))
+
+    #comp=m.plot_components(forecast).to_json
+
+    return forecast_sl
 
 @app.route('/products')
 def products():

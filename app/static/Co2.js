@@ -37,6 +37,7 @@ $(document).ready(function () {
             },
             xAxis: {
                 categories: Object.keys(Co2l)
+
             },
             yAxis: {
                 title: {
